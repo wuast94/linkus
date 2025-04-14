@@ -1,0 +1,37 @@
+:root {
+	/* Dracula Theme Colors */
+	--background: #282a36;
+	--current-line: #44475a;
+	--foreground: #f8f8f2;
+	--comment: #6272a4;
+	--cyan: #8be9fd;
+	--green: #50fa7b;
+	--orange: #ffb86c;
+	--pink: #ff79c6;
+	--purple: #bd93f9;
+	--red: #ff5555;
+	--yellow: #f1fa8c;
+
+	/* Semantic Colors */
+	--text-primary: var(--foreground);
+	--text-secondary: var(--comment);
+	--text-accent: var(--purple);
+
+	--bg-primary: var(--background);
+	--bg-secondary: var(--current-line);
+
+	--border-color: var(--current-line);
+
+	--link-color: var(--cyan);
+	--link-hover: var(--pink);
+
+	--button-primary-bg: var(--purple);
+	--button-primary-text: var(--background);
+	--button-secondary-bg: var(--current-line);
+	--button-secondary-text: var(--foreground);
+
+	--error: var(--red);
+	--warning: var(--orange);
+	--success: var(--green);
+	--info: var(--cyan);
+}

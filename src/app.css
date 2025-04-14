@@ -1,0 +1,79 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import './lib/styles/theme.css';
+
+/* Base styles */
+body {
+	@apply bg-dracula-background text-dracula-foreground;
+	min-height: 100vh;
+}
+
+h1 {
+	@apply mb-4 text-2xl font-bold text-dracula-purple;
+}
+
+h2 {
+	@apply mb-3 text-xl font-semibold text-dracula-cyan;
+}
+
+h3 {
+	@apply mb-2 text-lg font-medium text-dracula-pink;
+}
+
+a {
+	@apply text-dracula-cyan transition-colors hover:text-dracula-pink;
+}
+
+button {
+	@apply rounded bg-dracula-purple px-4 py-2 text-dracula-background transition-colors hover:bg-dracula-pink;
+}
+
+button.secondary {
+	@apply bg-dracula-current-line text-dracula-foreground hover:bg-dracula-comment;
+}
+
+input,
+textarea,
+select {
+	@apply rounded border border-dracula-comment bg-dracula-current-line px-3 py-2 text-dracula-foreground focus:border-dracula-purple focus:outline-none;
+}
+
+.card {
+	@apply rounded-lg border border-dracula-comment bg-dracula-current-line p-4;
+}
+
+.container {
+	width: 100%;
+	@apply px-4;
+}
+
+@media (min-width: 640px) {
+	.container {
+		max-width: none;
+	}
+}
+
+@media (min-width: 768px) {
+	.container {
+		max-width: none;
+	}
+}
+
+@media (min-width: 1024px) {
+	.container {
+		max-width: none;
+	}
+}
+
+@media (min-width: 1280px) {
+	.container {
+		max-width: none;
+	}
+}
+
+@media (min-width: 1536px) {
+	.container {
+		max-width: none;
+	}
+}
