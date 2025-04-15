@@ -13,20 +13,27 @@ let config: Config | null = null; // Initialize as null to track loading state
 function ensureConfigExists() {
 	console.log(`Checking for runtime config at: ${runtimeConfigFilePath}`);
 	try {
-		// Check if runtime config.yaml exists
-		if (!existsSync(runtimeConfigFilePath)) {
-			console.log(`Runtime config '${runtimeConfigFilePath}' not found.`);
-
-			// Check if the bundled example config exists within the image
+		// Check if the runtime config directory exists first
+		if (existsSync(runtimeConfigDir)) {
+			// Directory exists (volume likely mounted), check for the file
+			if (existsSync(runtimeConfigFilePath)) {
+				console.log(`Runtime config found at '${runtimeConfigFilePath}'.`);
+			} else {
+				// Directory exists, but file is missing - user error with mounted volume
+				const errorMsg = `Error: Config directory '${runtimeConfigDir}' exists (volume mounted?), but config file '${runtimeConfigFilePath}' is missing. Please ensure config.yaml is present in your mounted volume.`;
+				console.error(errorMsg);
+				throw new Error(errorMsg);
+			}
+		} else {
+			// Runtime directory does NOT exist, proceed with example copy logic
+			console.log(`Runtime config directory '${runtimeConfigDir}' not found.`);
 			console.log(`Checking for bundled example config at: ${bundledExampleConfigFilePath}`);
 			if (existsSync(bundledExampleConfigFilePath)) {
 				console.log(`Bundled example config found. Attempting to copy to runtime location...`);
 
-				// Ensure the runtime config directory exists
-				if (!existsSync(runtimeConfigDir)) {
-					console.log(`Creating runtime config directory: ${runtimeConfigDir}`);
-					mkdirSync(runtimeConfigDir, { recursive: true });
-				}
+				// Ensure the runtime config directory exists (it didn't initially)
+				console.log(`Creating runtime config directory: ${runtimeConfigDir}`);
+				mkdirSync(runtimeConfigDir, { recursive: true });
 
 				// Copy the bundled example to the expected runtime location
 				copyFileSync(bundledExampleConfigFilePath, runtimeConfigFilePath);
@@ -34,13 +41,11 @@ function ensureConfigExists() {
 					`Config file copied successfully from bundled example to '${runtimeConfigFilePath}'.`
 				);
 			} else {
-				// Critical error: No runtime config and no bundled example found
-				const errorMsg = `Error: Runtime config '${runtimeConfigFilePath}' not found and bundled example config '${bundledExampleConfigFilePath}' is also missing. Cannot start.`;
+				// Critical error: No runtime dir and no bundled example found
+				const errorMsg = `Error: Runtime config directory '${runtimeConfigDir}' not found and bundled example config '${bundledExampleConfigFilePath}' is also missing. Cannot start.`;
 				console.error(errorMsg);
 				throw new Error(errorMsg);
 			}
-		} else {
-			console.log(`Runtime config found at '${runtimeConfigFilePath}'.`);
 		}
 	} catch (error) {
 		console.error('Error during config file check/copy:', error);

@@ -5,55 +5,45 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				dracula: {
-					background: '#282a36',
-					'current-line': '#44475a',
-					foreground: '#f8f8f2',
-					comment: '#6272a4',
-					cyan: '#8be9fd',
-					green: '#50fa7b',
-					orange: '#ffb86c',
-					pink: '#ff79c6',
-					purple: '#bd93f9',
-					red: '#ff5555',
-					yellow: '#f1fa8c'
-				},
-				dark: {
-					DEFAULT: '#282a36', // dracula background
-					900: '#21222c', // slightly darker than background
-					800: '#282a36', // dracula background
-					700: '#44475a' // dracula current-line
-				},
-				primary: {
-					DEFAULT: '#bd93f9', // dracula purple
-					light: '#ff79c6', // dracula pink
-					dark: '#6272a4' // dracula comment
-				},
-				success: {
-					DEFAULT: '#50fa7b', // dracula green
-					light: '#69ff94', // lighter green
-					dark: '#41c462' // darker green
-				},
-				error: {
-					DEFAULT: '#ff5555', // dracula red
-					light: '#ff6e6e', // lighter red
-					dark: '#cc4444' // darker red
-				},
-				warning: {
-					DEFAULT: '#ffb86c', // dracula orange
-					light: '#ffd285', // lighter orange
-					dark: '#cc9356' // darker orange
-				},
-				text: {
-					DEFAULT: '#f8f8f2', // dracula foreground
-					secondary: '#6272a4', // dracula comment
-					muted: '#44475a' // dracula current-line
-				},
-				border: {
-					DEFAULT: '#44475a', // dracula current-line
-					light: '#6272a4', // dracula comment
-					dark: '#282a36' // dracula background
-				}
+				// Backgrounds
+				background: 'var(--bg-primary)',
+				'background-secondary': 'var(--bg-secondary)',
+				'background-tertiary': 'var(--bg-tertiary)',
+
+				// Text
+				foreground: 'var(--text-primary)',
+				'foreground-secondary': 'var(--text-secondary)',
+				'foreground-tertiary': 'var(--text-tertiary)',
+				'foreground-accent': 'var(--text-on-accent)',
+
+				// Accents
+				primary: 'var(--accent-primary)',
+				'primary-hover': 'var(--accent-primary-hover)',
+				secondary: 'var(--accent-secondary)',
+				'secondary-hover': 'var(--accent-secondary-hover)',
+
+				// Borders
+				border: 'var(--border-primary)',
+				'border-secondary': 'var(--border-secondary)',
+				'border-focus': 'var(--border-focus)',
+
+				// Status
+				success: 'var(--status-success)',
+				error: 'var(--status-error)',
+				warning: 'var(--status-warning)',
+				info: 'var(--status-info)',
+
+				// Links
+				link: 'var(--link-primary)',
+				'link-hover': 'var(--link-hover)'
+			},
+			borderRadius: {
+				sm: 'var(--radius-sm)',
+				DEFAULT: 'var(--radius-md)', // Default border radius
+				md: 'var(--radius-md)',
+				lg: 'var(--radius-lg)',
+				xl: 'var(--radius-xl)',
+				full: 'var(--radius-full)'
 			}
 		}
 	},

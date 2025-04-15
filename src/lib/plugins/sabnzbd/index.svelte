@@ -99,24 +99,24 @@
 	href={canAccess(service) ? service.url : undefined}
 	target="_blank"
 	rel="noopener noreferrer"
-	class="block rounded border border-border bg-dark-900 p-4 shadow-lg transition-colors hover:border-border-light"
+	class="block rounded border border-border bg-dark-900 p-4 shadow-lg transition-colors hover:bg-dark"
 	class:pointer-events-none={!canAccess(service)}
 >
 	{#if error}
-		<p class="text-dracula-red">{service.plugin}: {error}</p>
-	{:else if service.config.show_queue}
+		<p class="text-error">{service.plugin}: {error}</p>
+	{:else if service.config?.show_queue}
 		{#if data.queue.length === 0}
-			<div class="text-sm text-text-secondary">No active downloads</div>
+			<div class="text-sm text-foreground-secondary">No active downloads</div>
 		{:else}
 			<div class="flex flex-col gap-2">
 				{#each data.queue.slice(0, 3) as item}
-					<div class="relative h-8 w-full overflow-hidden rounded bg-dark-700">
+					<div class="relative h-8 w-full overflow-hidden rounded bg-background-tertiary">
 						<div
 							class="absolute left-0 top-0 h-full bg-primary"
 							style="width: {item.progress}%"
 						></div>
 						<div
-							class="absolute left-0 top-0 flex h-full w-full items-center justify-between px-2 text-text"
+							class="absolute left-0 top-0 flex h-full w-full items-center justify-between px-2 text-foreground"
 						>
 							<div class="flex-1 truncate" title={item.name}>
 								{item.name}
@@ -130,7 +130,7 @@
 						</div>
 					</div>
 				{/each}
-				<div class="text-sm text-text-secondary">
+				<div class="text-sm text-foreground-secondary">
 					Speed: {data.speed}
 				</div>
 			</div>

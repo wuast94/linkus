@@ -15,23 +15,16 @@
 	});
 </script>
 
-<div class="clock-plugin">
-	<h2>Current Time</h2>
+<div class="block rounded border border-border bg-dark-900 p-4 shadow-lg transition-colors hover:bg-dark">
 	<p class="time">{currentTime}</p>
 </div>
 
 <style>
-	.clock-plugin {
-		padding: 1rem;
-		text-align: center;
-		background-color: var(--card-bg-color, #f9f9f9); /* Use theme variable if available */
-		border-radius: 8px;
-		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-	}
 	.time {
-		font-size: 2em;
+		font-size: 2rem;
 		font-weight: bold;
-		margin-top: 0.5rem;
-		color: var(--text-color, #333); /* Use theme variable */
+		color: var(--text-primary);
+		margin: 0;
+		text-align: center;
 	}
 </style>

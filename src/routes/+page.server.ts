@@ -45,7 +45,6 @@ export const load: PageServerLoad = ({ locals }) => {
 	return {
 		services, // Use services variable
 		categories: config.categories,
-		user,
-		appConfig: config.app // Pass app config to the layout/page
+		user
 	};
 };

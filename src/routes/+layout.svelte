@@ -4,23 +4,25 @@
 	import '../app.css';
 	import 'overlayscrollbars/overlayscrollbars.css';
 
-	let { children, data } = $props<{ children: any; data: PageData }>();
-
-	const appConfig = data.appConfig;
-	const pageTitle = appConfig?.title ?? 'Linkus';
-	const theme = appConfig?.theme ?? 'system';
+	export let data: PageData;
 
 	onMount(() => {
+		const appConfig = data.appConfig;
+		const pageTitle = appConfig?.title ?? 'Linkus';
+		const theme = appConfig?.theme ?? 'system';
+		document.title = pageTitle; // Set title dynamically
+		document.documentElement.setAttribute('data-theme', theme);
+
 		let currentTheme = theme;
 		if (theme === 'system') {
-			currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+			currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dracula' : 'light';
 		}
 		document.documentElement.setAttribute('data-theme', currentTheme);
 
 		if (theme === 'system') {
 			const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 			const handleChange = () => {
-				document.documentElement.setAttribute('data-theme', mediaQuery.matches ? 'dark' : 'light');
+				document.documentElement.setAttribute('data-theme', mediaQuery.matches ? 'dracula' : 'light');
 			};
 			mediaQuery.addEventListener('change', handleChange);
 			return () => mediaQuery.removeEventListener('change', handleChange);
@@ -29,16 +31,16 @@
 </script>
 
 <svelte:head>
-	<title>{pageTitle}</title>
+	<title></title>
 	<!-- Add meta tags, etc. here if needed -->
 </svelte:head>
 
 <!-- Basic layout structure -->
 <div class="app-container">
 	<!-- Header placeholder (optional) -->
-	<!-- <header><h1>{pageTitle}</h1></header> -->
+	<!-- <header><h1></h1></header> -->
 	<main>
-		{@render children()}
+		<slot />
 	</main>
 	<!-- Footer placeholder (optional) -->
 </div>

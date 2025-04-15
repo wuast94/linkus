@@ -5,42 +5,42 @@
 
 /* Base styles */
 body {
-	@apply bg-dracula-background text-dracula-foreground;
+	@apply bg-background text-foreground;
 	min-height: 100vh;
 }
 
 h1 {
-	@apply mb-4 text-2xl font-bold text-dracula-purple;
+	@apply mb-4 text-2xl font-bold text-primary;
 }
 
 h2 {
-	@apply mb-3 text-xl font-semibold text-dracula-cyan;
+	@apply mb-3 text-xl font-semibold text-info;
 }
 
 h3 {
-	@apply mb-2 text-lg font-medium text-dracula-pink;
+	@apply mb-2 text-lg font-medium text-secondary;
 }
 
 a {
-	@apply text-dracula-cyan transition-colors hover:text-dracula-pink;
+	@apply text-link transition-colors hover:text-link-hover;
 }
 
 button {
-	@apply rounded bg-dracula-purple px-4 py-2 text-dracula-background transition-colors hover:bg-dracula-pink;
+	@apply rounded bg-primary px-4 py-2 text-foreground-accent transition-colors hover:bg-primary-hover;
 }
 
 button.secondary {
-	@apply bg-dracula-current-line text-dracula-foreground hover:bg-dracula-comment;
+	@apply bg-background-secondary text-foreground hover:bg-border-secondary;
 }
 
 input,
 textarea,
 select {
-	@apply rounded border border-dracula-comment bg-dracula-current-line px-3 py-2 text-dracula-foreground focus:border-dracula-purple focus:outline-none;
+	@apply rounded border border-border-secondary bg-background-secondary px-3 py-2 text-foreground focus:border-border-focus focus:outline-none;
 }
 
 .card {
-	@apply rounded-lg border border-dracula-comment bg-dracula-current-line p-4;
+	@apply rounded-lg border border-border-secondary bg-background-secondary p-4;
 }
 
 .container {

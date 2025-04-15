@@ -88,6 +88,8 @@ export async function fetchSabnzbdData(service: Service) {
 			throw new Error(`Failed to parse JSON response: ${message}`);
 		}
 	} catch (error: unknown) {
+		// Log the original error for better debugging
+		console.error('[Sabnzbd Plugin] Original fetch error:', error);
 		const message = error instanceof Error ? error.message : String(error);
 		throw new Error(`Failed to fetch Sabnzbd data: ${message}`);
 	}
