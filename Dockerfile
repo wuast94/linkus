@@ -10,6 +10,9 @@ RUN npm ci
 # Copy the rest of the application source code
 COPY . .
 
+# Clean the .svelte-kit directory before building to ensure fresh types
+RUN rm -rf .svelte-kit
+
 # Build the SvelteKit application
 # This might implicitly use .env files, but we override ORIGIN/HOSTS at runtime
 RUN npm run build
