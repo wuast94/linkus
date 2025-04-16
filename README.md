@@ -79,4 +79,4 @@ For insights into the project's architecture and design decisions, please see th
 
 ---
 
-🤖 Note: This project was significantly developed with the assistance of AI language models.
+🤖 Note: This project was completly developed with the assistance of AI language models.
