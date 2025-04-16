@@ -23,9 +23,8 @@
 		[key: string]: CategoryGroup;
 	}
 
-	let selectedCategory: string | null = null;
+	let selectedCategory: string | null = 'all'; // Default to 'all'
 
-	// Group services by category
 	const servicesByCategory: ServicesByCategory = {};
 
 	for (const category of categories) {
@@ -51,58 +50,49 @@
 		}
 	}
 
-	function selectCategory(categoryId: string) {
-		selectedCategory = selectedCategory === categoryId ? null : categoryId;
+	function selectCategory(categoryId: string | null) {
+		selectedCategory = categoryId;
 	}
 
-	$: filteredCategories = selectedCategory
-		? [servicesByCategory[selectedCategory]]
-		: Object.values(servicesByCategory);
+	$: filteredCategories = selectedCategory === 'all'
+		? Object.values(servicesByCategory)
+		: selectedCategory
+			? [servicesByCategory[selectedCategory]]
+			: [];
 
 	let mainContentElement: HTMLElement;
 	let pluginWidth = 500;
 	let resizeObserver: ResizeObserver;
 
 	function calculatePluginWidth(currentContainerWidth: number) {
-		const moduleItemWidth = 250; // Width of one module
-		const moduleGap = 8; // gap-2 between modules
-		const mainGap = 16;  // gap-4 between modules area and plugin area
+		const moduleItemWidth = 250;
+		const moduleGap = 8;
+		const mainGap = 16;
 		const minPluginWidth = 350;
 		const maxPluginWidth = 650;
 
-		// Container width MINUS minimum plugin width MINUS the gap between them
 		const maxModuleAreaWidth = currentContainerWidth - minPluginWidth - mainGap;
 
-		if (maxModuleAreaWidth <= moduleItemWidth) { // If not enough space for even one module + min plugin
-			pluginWidth = Math.max(minPluginWidth, Math.min(currentContainerWidth - moduleItemWidth - mainGap, maxPluginWidth)); // Try to fit at least one module if possible
-			pluginWidth = Math.max(minPluginWidth, pluginWidth); // Ensure it doesn't go below min plugin width
+		if (maxModuleAreaWidth <= moduleItemWidth) {
+			pluginWidth = Math.max(minPluginWidth, Math.min(currentContainerWidth - moduleItemWidth - mainGap, maxPluginWidth));
+			pluginWidth = Math.max(minPluginWidth, pluginWidth);
 			pluginWidth = maxPluginWidth;
 			return;
 		}
 
-		// Add moduleGap to the width to account for the space needed *before* the first gap applies
 		const numColumns = Math.max(1, Math.floor((maxModuleAreaWidth + moduleGap) / (moduleItemWidth + moduleGap)));
 
-		// Calculate the actual width these columns will occupy
 		const actualModulesWidth = numColumns * moduleItemWidth + (numColumns > 0 ? (numColumns - 1) * moduleGap : 0);
 
-		// Total width minus the calculated actual module width minus the gap between the two sections
 		let calculatedPluginWidth = currentContainerWidth - actualModulesWidth - mainGap;
 
-		// Clamp the plugin width
 		pluginWidth = Math.max(minPluginWidth, Math.min(calculatedPluginWidth, maxPluginWidth));
 
-		// --- Sanity Check ---
-		// If the calculated plugin width + actual module width + main gap > total width,
-		// it means clamping forced the plugin wider, potentially causing overflow.
-		// In this scenario, prioritize fitting modules and let the plugin take exactly the remainder clamped.
-		if (pluginWidth + actualModulesWidth + mainGap > currentContainerWidth + 1) { // Add 1px tolerance for rounding
-		   // Recalculate plugin width strictly based on remaining space after modules take their calculated width
-		   calculatedPluginWidth = currentContainerWidth - actualModulesWidth - mainGap;
-		   pluginWidth = Math.max(minPluginWidth, Math.min(calculatedPluginWidth, maxPluginWidth)); // Re-clamp, prioritizing not overflowing container
+		if (pluginWidth + actualModulesWidth + mainGap > currentContainerWidth + 1) {
+			calculatedPluginWidth = currentContainerWidth - actualModulesWidth - mainGap;
+			pluginWidth = Math.max(minPluginWidth, Math.min(calculatedPluginWidth, maxPluginWidth));
 		}
 
-		// Final check: Ensure plugin width isn't negative or excessively small if container is tiny
 		pluginWidth = Math.max(minPluginWidth, pluginWidth);
 	}
 
@@ -110,7 +100,6 @@
 		if (mainContentElement) {
 			resizeObserver = new ResizeObserver(entries => {
 				for (let entry of entries) {
-					// Use contentBoxSize for more accurate width calculation
 					const width = entry.contentBoxSize?.[0]?.inlineSize ?? entry.contentRect.width;
 					if (width) {
 						calculatePluginWidth(width);
@@ -118,7 +107,6 @@
 				}
 			});
 			resizeObserver.observe(mainContentElement);
-			// Initial calculation
 			calculatePluginWidth(mainContentElement.clientWidth);
 		}
 	});
@@ -143,6 +131,12 @@
 
 		<!-- Category filters -->
 		<div class="flex flex-wrap gap-2">
+			<button
+				class="btn btn-sm {selectedCategory === 'all' ? 'btn-primary' : 'btn-ghost'}"
+				on:click={() => selectCategory('all')}
+			>
+				All
+			</button>
 			{#each categories as category}
 				<button
 					class="btn btn-sm {selectedCategory === category.id ? 'btn-primary' : 'btn-ghost'}"
