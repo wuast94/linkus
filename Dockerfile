@@ -36,6 +36,6 @@ USER node
 EXPOSE ${PORT}
 
 HEALTHCHECK --interval=15s --timeout=5s --start-period=30s \
-  CMD node -e "require('http').request({ host: process.env.HOST || '0.0.0.0', port: process.env.PORT || 3000, path: '/', method: 'HEAD' }, (res) => { process.exit(res.statusCode === 200 ? 0 : 1); }).on('error', () => process.exit(1)).end()"
+  CMD node -e "require('http').request({ host: process.env.HOST || '0.0.0.0', port: process.env.PORT || 3000, path: '/api/health', method: 'HEAD' }, (res) => { process.exit(res.statusCode === 200 ? 0 : 1); }).on('error', () => process.exit(1)).end()"
 
 CMD [ "node", "build/index.js" ]
