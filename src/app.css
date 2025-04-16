@@ -1,2 +1,10 @@
 @import 'tailwindcss';
-@plugin 'daisyui';
+
+@plugin "daisyui" {
+	themes: all;
+	darktheme: 'dracula';
+	defaulttheme: 'light';
+	logs: true; /* Enable logs to check theme generation */
+}
+
+/* Keep any existing custom styles below */
