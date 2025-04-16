@@ -1,0 +1,7 @@
+services:
+  linkus:
+    image: wuast94/linkus:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - ./config:/app/config
