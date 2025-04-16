@@ -13,6 +13,69 @@
 
 	const { services, categories, user } = data;
 
+	interface ServiceStatus {
+		status: 'unknown' | 'online' | 'offline';
+		responseTime: number | null;
+		error: string | null;
+	}
+
+	let serviceStatuses: { [key: string]: ServiceStatus } = {};
+
+	for (const service of services) {
+		if (service.type === 'http_check') {
+			serviceStatuses[service.name] = { status: 'unknown', responseTime: null, error: null };
+		}
+	}
+
+	async function fetchServiceStatus(serviceUrl: string): Promise<Omit<ServiceStatus, 'status'> & { online: boolean, status?: number, statusText?: string }> {
+		try {
+			const startTime = performance.now();
+			const response = await fetch(`/api/status?url=${encodeURIComponent(serviceUrl)}`);
+			const data = await response.json();
+			const endTime = performance.now();
+
+			if (data.online) {
+				return {
+					online: true,
+					responseTime: data.responseTime ?? Math.round(endTime - startTime),
+					error: null,
+				};
+			} else {
+				return {
+					online: false,
+					responseTime: null,
+					error: data.error || `Service returned ${data.status} ${data.statusText}`,
+				};
+			}
+		} catch (err) {
+			return {
+				online: false,
+				responseTime: null,
+				error: err instanceof Error ? err.message : 'Failed to check service status',
+			};
+		}
+	}
+
+	async function fetchAllStatuses() {
+		console.log("Fetching all statuses...");
+		const promises = services
+			.filter(s => s.type === 'http_check' && s.url)
+			.map(async (service) => {
+				const result = await fetchServiceStatus(service.url!);
+				serviceStatuses[service.name] = {
+					status: result.online ? 'online' : 'offline',
+					responseTime: result.responseTime,
+					error: result.error
+				};
+			});
+
+		await Promise.allSettled(promises);
+		serviceStatuses = { ...serviceStatuses };
+		console.log("Status fetch complete:", serviceStatuses);
+	}
+
+	let statusInterval: number | null = null;
+
 	interface CategoryGroup {
 		name: string;
 		icon: string;
@@ -23,7 +86,7 @@
 		[key: string]: CategoryGroup;
 	}
 
-	let selectedCategory: string | null = 'all'; // Default to 'all'
+	let selectedCategory: string | null = 'all';
 
 	const servicesByCategory: ServicesByCategory = {};
 
@@ -81,22 +144,24 @@
 		}
 
 		const numColumns = Math.max(1, Math.floor((maxModuleAreaWidth + moduleGap) / (moduleItemWidth + moduleGap)));
-
 		const actualModulesWidth = numColumns * moduleItemWidth + (numColumns > 0 ? (numColumns - 1) * moduleGap : 0);
-
 		let calculatedPluginWidth = currentContainerWidth - actualModulesWidth - mainGap;
-
 		pluginWidth = Math.max(minPluginWidth, Math.min(calculatedPluginWidth, maxPluginWidth));
 
 		if (pluginWidth + actualModulesWidth + mainGap > currentContainerWidth + 1) {
-			calculatedPluginWidth = currentContainerWidth - actualModulesWidth - mainGap;
-			pluginWidth = Math.max(minPluginWidth, Math.min(calculatedPluginWidth, maxPluginWidth));
+		   calculatedPluginWidth = currentContainerWidth - actualModulesWidth - mainGap;
+		   pluginWidth = Math.max(minPluginWidth, Math.min(calculatedPluginWidth, maxPluginWidth));
 		}
 
 		pluginWidth = Math.max(minPluginWidth, pluginWidth);
 	}
 
 	onMount(() => {
+		fetchAllStatuses();
+
+		const updateInterval = 30000;
+		statusInterval = window.setInterval(fetchAllStatuses, updateInterval);
+
 		if (mainContentElement) {
 			resizeObserver = new ResizeObserver(entries => {
 				for (let entry of entries) {
@@ -112,6 +177,10 @@
 	});
 
 	onDestroy(() => {
+		if (statusInterval !== null) {
+			clearInterval(statusInterval);
+		}
+
 		if (resizeObserver && mainContentElement) {
 			resizeObserver.unobserve(mainContentElement);
 		}
@@ -155,7 +224,10 @@
 					{#each filteredCategories as category}
 						{#each category.services as service}
 							{#if service.type === 'http_check'}
-								<Module {service} />
+								{@const statusData = serviceStatuses[service.name] || { status: 'unknown', responseTime: null, error: 'Loading...' }}
+								{#key service.name}
+									<Module {service} status={statusData.status} responseTime={statusData.responseTime} error={statusData.error} />
+								{/key}
 							{/if}
 						{/each}
 					{/each}
@@ -168,7 +240,9 @@
 					{#each filteredCategories as category}
 						{#each category.services as service}
 							{#if service.type !== 'http_check'}
-								<DynamicPlugin {service} />
+								{#key service.name}
+									<DynamicPlugin {service} />
+								{/key}
 							{/if}
 						{/each}
 					{/each}

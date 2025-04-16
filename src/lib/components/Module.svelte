@@ -1,54 +1,10 @@
 <script lang="ts">
 	import type { Service } from '$lib/types';
-	import { onMount, onDestroy } from 'svelte';
 
 	export let service: Service;
-
-	let status: 'unknown' | 'online' | 'offline' = 'unknown';
-	let responseTime: number | null = null;
-	let error: string | null = null;
-	let interval: number | null = null;
-
-	async function checkStatus() {
-		if (!service.url) {
-			error = 'No URL configured';
-			status = 'offline';
-			return;
-		}
-
-		try {
-			const startTime = performance.now();
-			const response = await fetch(`/api/status?url=${encodeURIComponent(service.url)}`);
-			const data = await response.json();
-			const endTime = performance.now();
-			
-			if (data.online) {
-				responseTime = data.responseTime ?? Math.round(endTime - startTime);
-				status = 'online';
-				error = null;
-			} else {
-				status = 'offline';
-				error = data.error || `Service returned ${data.status} ${data.statusText}`;
-				responseTime = null;
-			}
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to check service status';
-			responseTime = null;
-			status = 'offline';
-		}
-	}
-
-	onMount(() => {
-		checkStatus();
-		const updateInterval = service.config?.update_interval ?? 30000;
-		interval = window.setInterval(checkStatus, updateInterval);
-	});
-
-	onDestroy(() => {
-		if (interval !== null) {
-			clearInterval(interval);
-		}
-	});
+	export let status: 'unknown' | 'online' | 'offline';
+	export let responseTime: number | null;
+	export let error: string | null;
 
 	function openService() {
 		if (service.url) {
