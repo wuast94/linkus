@@ -45,7 +45,7 @@ We strictly follow the [Conventional Commits](https://www.conventionalcommits.or
 
 Append `!` **before the colon** in the header to indicate a breaking change (bumps `MAJOR` version). A `BREAKING CHANGE:` footer note is also required.
 
-```
+```text
 refactor(auth)!: switch JWT library
 BREAKING CHANGE: User sessions are invalidated. Users must log in again.
 ```
