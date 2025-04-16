@@ -14,7 +14,7 @@ Built with SvelteKit. Linkus is modular, themeable, and extensible.
 - **Service Modules:** Displays configured services with status checks and direct links.
 - **Plugin System:** Allows adding custom components (e.g., calendar, download queue) linked to services, also respecting group permissions. Current plugins include `arrCalendar`, `sabnzbd`, `clock`.
 - **Configurable:** All services, categories, and user access mappings are managed via `config/config.yaml`.
-- **Theming:** Uses Tailwind CSS with a customizable CSS variable-based theme (inspired by Dracula).
+- **Theming:** Uses Tailwind CSS with [DaisyUI](https://daisyui.com/) components and its themes.
 - **SSO Integration:** Designed to work seamlessly behind an authentication proxy.
 
 ## Getting Started

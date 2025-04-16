@@ -52,27 +52,27 @@ BREAKING CHANGE: User sessions are invalidated. Users must log in again.
 
 **Linkus Examples:**
 
-```
+```text
 feat(plugin/sabnzbd): display download speed
 ```
 
-```
+```text
 fix(core): handle missing API key in config gracefully
 ```
 
-```
+```text
 refactor(ui): extract Module component logic
 ```
 
-```
+```text
 docs(plugin/arrCalendar): add setup instructions
 ```
 
-```
+```text
 chore(deps): update SvelteKit to latest version
 ```
 
-```
+```text
 style(plugin/clock): adjust text alignment
 ```
 
@@ -87,6 +87,7 @@ Plugins are designed to be self-contained modules dynamically loaded by the appl
     - Use Tailwind CSS utility classes where possible.
     - For custom styles, use a `<style>` block within your `index.svelte`.
     - Adhere to the application's theme variables defined in `src/lib/styles/theme.css`. Use `var(--variable-name)`.
+    - [DaisyUI](https://daisyui.com/) components and classes are available and required for common UI elements.
     - If styling third-party components (like FullCalendar), use `:global()` selectors and map their styles to the theme variables.
     - **Adding Colors:** If your plugin _requires_ a new color not present in the theme, you **must** add the corresponding variable to **all** theme definitions within `src/lib/styles/theme.css` to maintain consistency. Document the new variable.
 5.  **Configuration:** Plugins are typically associated with services defined in `config/config.yaml`. Your plugin's frontend and backend logic will receive the relevant service configuration.
