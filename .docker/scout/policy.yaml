@@ -1,0 +1,8 @@
+policies:
+  approvedBaseImages:
+    sources:
+      - docker.io/library/node:*-alpine
+      - docker.io/library/node:*-slim
+      - docker.io/library/* # all official images
+    onlySupportedTags: true
+    onlySupportedOSDistributions: true
