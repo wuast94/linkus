@@ -19,10 +19,24 @@ function ensureConfigExists() {
 			if (existsSync(runtimeConfigFilePath)) {
 				console.log(`Runtime config found at '${runtimeConfigFilePath}'.`);
 			} else {
-				// Directory exists, but file is missing - user error with mounted volume
-				const errorMsg = `Error: Config directory '${runtimeConfigDir}' exists (volume mounted?), but config file '${runtimeConfigFilePath}' is missing. Please ensure config.yaml is present in your mounted volume.`;
-				console.error(errorMsg);
-				throw new Error(errorMsg);
+				// Directory exists, but file is missing - try to copy the example
+				console.log(
+					`Runtime config file '${runtimeConfigFilePath}' not found in existing directory '${runtimeConfigDir}'. Checking for bundled example.`
+				);
+				if (existsSync(bundledExampleConfigFilePath)) {
+					console.log(
+						`Bundled example config found at '${bundledExampleConfigFilePath}'. Attempting to copy...`
+					);
+					copyFileSync(bundledExampleConfigFilePath, runtimeConfigFilePath);
+					console.log(
+						`Config file copied successfully from bundled example to '${runtimeConfigFilePath}'.`
+					);
+				} else {
+					// Critical error: Directory exists, file doesn't, AND no example found
+					const errorMsg = `Error: Config directory '${runtimeConfigDir}' exists, but config file '${runtimeConfigFilePath}' is missing, and bundled example config '${bundledExampleConfigFilePath}' is also missing. Cannot start.`;
+					console.error(errorMsg);
+					throw new Error(errorMsg);
+				}
 			}
 		} else {
 			// Runtime directory does NOT exist, proceed with example copy logic

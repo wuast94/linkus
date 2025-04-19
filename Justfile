@@ -16,6 +16,6 @@ docker-run:
     docker rm -f linkus || true
     docker run --rm -p 3000:3000 \
     -e PORT=3000 \
-    -v $(pwd)/config:/app/config \
+    -v $(pwd)/configtest:/app/config \
     --name linkus \
     linkus-app
