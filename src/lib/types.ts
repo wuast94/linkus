@@ -8,18 +8,18 @@ export interface PluginSpecificConfig {
 // Combined interface for all items in the 'services' list
 export interface Service {
 	name: string;
+	icon?: string; // Optional icon
+	url?: string; // URL for the service (required for link/http_check, optional for plugin)
 	type: 'http_check' | 'plugin' | 'link'; // Renamed 'ping' to 'http_check'
-	icon: string; // Simple string icon name
-	url?: string;
-	category: string; // ID matching a Category
-	description?: string;
-	groups?: string[];
-	user?: string[];
+	category?: string; // Optional category
+	description?: string; // Optional description
+	plugin?: string; // Required if type is 'plugin'
+	headers?: Record<string, string>; // Optional: Custom headers for http_check
+	config?: PluginSpecificConfig; // Optional plugin-specific config
+	groups?: string[]; // Optional: Restrict visibility by group
+	user?: string[]; // Optional: Restrict visibility by user
 	// Ping-specific
 	ping_interval?: number; // In seconds
-	// Plugin-specific
-	plugin?: string; // Name of the plugin component
-	config?: PluginSpecificConfig;
 }
 
 export interface Category {
@@ -48,4 +48,13 @@ export interface Config {
 	'Remote-Name'?: string;
 	'Remote-Email'?: string;
 	'Remote-Groups'?: string; // Comma-separated string
+}
+
+// Represents the status result fetched from /api/status
+export interface ServiceStatus {
+	online: boolean;
+	status?: number; // HTTP status code
+	statusText?: string;
+	responseTime?: number; // Time in milliseconds
+	error?: string; // Error message if check failed
 }

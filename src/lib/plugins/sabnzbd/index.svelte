@@ -47,10 +47,6 @@
 		return (totalGB - remainingGB).toFixed(1) + ' GB';
 	}
 
-	function canAccess(service: Service) {
-		return service.config?.access_level === 'full' || service.config?.access_level === 'write';
-	}
-
 	async function fetchData() {
 		if (isInitialLoad) {
 			loading = true;
@@ -118,7 +114,7 @@
 				<p class="opacity-75">Loading {service.name}...</p>
 			</div>
 		</div>
-	{:else if service.config?.show_queue}
+	{:else}
 		{#if data.queue.length === 0}
 			<div class="text-sm opacity-75">No active downloads</div>
 		{:else}
@@ -155,7 +151,5 @@
 				</div>
 			</div>
 		{/if}
-	{:else}
-		<p class="opacity-75">Plugin configured, but queue display is disabled.</p>
 	{/if}
 </div>
