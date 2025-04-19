@@ -102,10 +102,8 @@
 		const categoryId = service.category;
 
 		if (categoryId && servicesByCategory[categoryId]) {
-			// If categoryId exists and is a valid key in servicesByCategory
 			servicesByCategory[categoryId].services.push(service);
 		} else {
-			// Handle uncategorized or missing category
 			if (!servicesByCategory['uncategorized']) {
 				servicesByCategory['uncategorized'] = {
 					name: 'Uncategorized',
@@ -113,7 +111,7 @@
 					services: []
 				};
 			}
-			servicesByCategory['uncategorized'].services.push(service); // Add service to uncategorized
+			servicesByCategory['uncategorized'].services.push(service);
 		}
 	}
 

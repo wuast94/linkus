@@ -32,7 +32,6 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	try {
 		const controller = new AbortController();
-		// Increase timeout to 10 seconds (10000 ms)
 		const timeout = setTimeout(() => controller.abort(), 10000);
 
 		const response = await nodeFetch(targetUrl, {
@@ -49,19 +48,16 @@ export const GET: RequestHandler = async ({ url }) => {
 			responseTime: null // We don't calculate this server-side currently
 		});
 	} catch (error) {
-		// Log concise error - This should now only log for *validated* URLs
 		const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 		console.error(`🚨 HTTP Check Error: ${errorMessage} (Validated Target URL: ${targetUrl})`);
 
-		// Log full details only in development
 		if (process.env.NODE_ENV === 'development') {
 			console.error('Full ping error details:', error);
 		}
 
 		return json({
 			online: false,
-			error: errorMessage // Use the extracted message
-			// Removed details: error.stack
+			error: errorMessage
 		});
 	}
 };
