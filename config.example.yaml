@@ -1,53 +1,130 @@
 # Linkus Example Configuration
+# ==========================
 
 # Application settings
 app:
+  # Title displayed in the browser tab and header
   title: My Dashboard
-  theme: light
+  # Theme name (e.g., 'light', 'dark', 'dracula', 'nord')
+  # For a list of available themes, check the documentation or theme files.
+  theme: dracula
 
-# Services list (links, ping checks, plugins)
+# Service definitions
+# Services are the core items displayed on your dashboard.
 services:
-  # Simple Link Example
-  - name: Search Engine
-    type: http_check
-    icon: search-web
-    url: https://duckduckgo.com
-    category: general
-    description: Privacy-focused search
-    # groups:
-    #   - admin
-    # user:
-    #   - admin
+  # --- HTTP Check Services ---
+  # These services perform a simple HTTP(S) request to check if a service is online.
+  # The status indicator (green/red dot) reflects the check result.
 
-  # Ping Check Example
-  - name: Local Router
-    type: http_check
-    icon: router-wireless
-    url: http://192.168.1.1
-    category: network
-    description: Check router status
-    ping_interval: 60
+  - name: DuckDuckGo
+    type: http_check # Type identifier for HTTP status checks
+    icon: search # Icon name (Lucide name like 'search', or custom file like 'my-icon.svg')
+    url: https://duckduckgo.com # The URL to ping for status
+    category: internet # Assigns the service to the 'internet' category
+    description: Privacy-focused Search # Optional description shown on hover/details
+    ping_interval: 60 # How often to check the status (in seconds). Default: 30
+    # groups:               # Optional: Restrict visibility to users in these groups
+    #   - admin
+    # user:                 # Optional: Restrict visibility to specific usernames
+    #   - myuser
 
-  # Plugin Example (Clock)
-  - name: Clock
-    type: plugin
-    plugin: clock
-    icon: clock-outline
-    category: general
+  - name: Cloudflare DNS
+    type: http_check
+    icon: globe
+    url: https://1.1.1.1 # Example using an IP address
+    category: internet
+    description: Cloudflare DNS
+    ping_interval: 120
+
+  - name: JSON Placeholder
+    type: http_check
+    icon: code
+    url: https://jsonplaceholder.typicode.com/todos/1 # Example checking a public API endpoint
+    category: development
+    description: Public JSON API for testing
+    # You can add custom headers if needed for the check
+    # headers:
+    #   Authorization: Bearer your_token
+    #   X-Custom-Header: Value
+
+  # --- Plugin Services ---
+  # These services integrate with other applications via plugins.
+  # They can display more dynamic information than simple status checks.
+  # Example: Clock Plugin (Built-in)
+  - name: Current Time
+    type: plugin # Type identifier for plugin services
+    plugin: clock # Name of the plugin to use (e.g., 'clock', 'sabnzbd')
+    category: general # Assigns the service to the 'general' category
     description: Displays the current time
+    config:
+      format: 24H
 
-# Categories to group services
+  # Example: Sabnzbd Plugin (Commented out by default)
+  # - name: Downloads
+  #   type: plugin
+  #   plugin: sabnzbd         # Use the 'sabnzbd' plugin
+  #   url: http://localhost:8080 # Base URL of your Sabnzbd instance
+  #   category: tools
+  #   description: Sabnzbd Download Manager
+  #   config:
+  #     # IMPORTANT: Replace with your actual API key
+  #     api_key: YOUR_SABNZBD_API_KEY # Get this from Sabnzbd -> Config -> General
+  #     base_url: http://localhost:8080 # Can use an internal address different from the link above
+  #     update_interval: 5000 # How often to refresh data (ms). Default: 5000
+  #   groups:               # Optional: Restrict visibility to users in these groups
+  #     - admin
+  #   user:                 # Optional: Restrict visibility to specific usernames
+  #     - myuser
+
+  # Example: Media Calendar Plugin (Commented out by default)
+  # - name: Media Calendar
+  #   type: plugin
+  #   plugin: arrCalendar     # Use the 'arrCalendar' plugin
+  #   # Provide the URL for one of your 'arr' instances (Sonarr or Radarr)
+  #   url: http://localhost:8989 # Example: Sonarr URL
+  #   category: tools
+  #   description: Upcoming Sonarr/Radarr Media
+  #   config:
+  #     # Sonarr Configuration (Required if you want Sonarr data)
+  #     # IMPORTANT: Replace with your actual Sonarr API key and URL
+  #     sonarr_api_key: YOUR_SONARR_API_KEY
+  #     sonarr_base_url: http://localhost:8989
+  #     # Radarr Configuration (Required if you want Radarr data)
+  #     # IMPORTANT: Replace with your actual Radarr API key and URL
+  #     radarr_api_key: YOUR_RADARR_API_KEY
+  #     radarr_base_url: http://localhost:7878
+  #     # General Configuration
+  #     update_interval: 300000 # How often to refresh data (ms). Default: 300000 (5 mins)
+  #   groups:               # Optional: Restrict visibility to users in these groups
+  #     - admin
+  #   user:                 # Optional: Restrict visibility to specific usernames
+  #     - myuser
+
+# Category definitions
+# Define the categories used to group services in the UI.
 categories:
-  - id: general
-    name: General
-    icon: view-dashboard
-  - id: network
-    name: Network
-    icon: lan
-# Test Headers (for local development without reverse proxy auth)
-# Uncomment and set these if running locally and need to simulate authenticated user
+  - id: general # Unique identifier for the category
+    name: General # Display name for the category
+    icon: list # Icon for the category (Feather Icons)
+
+  - id: internet
+    name: Internet Services
+    icon: wifi
+
+  - id: development
+    name: Development
+    icon: code
+
+  - id: tools
+    name: Tools & Utilities
+    icon: tool
+# Forward Authentication Simulation (Optional, for Development/Testing)
+# If you run Linkus behind a forward authentication proxy (like Authelia, Authentik),
+# Linkus reads headers like 'Remote-User', 'Remote-Groups' to determine the user.
+# You can simulate these headers for local testing without a real proxy.
+# WARNING: DO NOT use this in production environments!
 # testHeader:
-#   Remote-User: bob
-#   Remote-Groups: admin,dev,media
-#   Remote-Name: John Smith
-#   Remote-Email: jsmith@example.com
+#   Remote-User: testuser
+#   Remote-Groups: admin,dev
+#   Remote-Name: Test User
+#   Remote-Email: test@example.com
