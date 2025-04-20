@@ -34,18 +34,22 @@ export const GET: RequestHandler = async ({ url }) => {
 		const controller = new AbortController();
 		const timeout = setTimeout(() => controller.abort(), 10000);
 
+		const startTime = performance.now(); // Start timing
 		const response = await nodeFetch(targetUrl, {
 			method: 'GET',
 			signal: controller.signal,
 			agent
 		});
+		const endTime = performance.now(); // End timing
 
 		clearTimeout(timeout);
+		const responseTime = Math.round(endTime - startTime); // Calculate response time
+
 		return json({
 			online: response.ok,
 			status: response.status,
 			statusText: response.statusText,
-			responseTime: null // We don't calculate this server-side currently
+			responseTime: responseTime // Return calculated response time
 		});
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : 'Unknown error';

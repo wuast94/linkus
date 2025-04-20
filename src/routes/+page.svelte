@@ -29,15 +29,13 @@
 
 	async function fetchServiceStatus(serviceUrl: string): Promise<Omit<ServiceStatus, 'status'> & { online: boolean, status?: number, statusText?: string }> {
 		try {
-			const startTime = performance.now();
 			const response = await fetch(`/api/status?url=${encodeURIComponent(serviceUrl)}`);
 			const data = await response.json();
-			const endTime = performance.now();
 
 			if (data.online) {
 				return {
 					online: true,
-					responseTime: data.responseTime ?? Math.round(endTime - startTime),
+					responseTime: data.responseTime,
 					error: null,
 				};
 			} else {
