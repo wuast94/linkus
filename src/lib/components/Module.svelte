@@ -4,7 +4,7 @@
 	import type { SvelteComponent } from 'svelte';
 
 	export let service: Service;
-	export let status: 'unknown' | 'online' | 'offline';
+	export let status: 'unknown' | 'online' | 'offline' | 'warning';
 	export let responseTime: number | null;
 	export let error: string | null;
 
@@ -105,7 +105,9 @@
 								? 'badge-success'
 								: status === 'offline'
 									? 'badge-error'
-									: 'badge-ghost'}"
+									: status === 'warning'
+										? 'badge-warning'
+										: 'badge-ghost'}"
 					></div>
 				</div>
 			{/if}

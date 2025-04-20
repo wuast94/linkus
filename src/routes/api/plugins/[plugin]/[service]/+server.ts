@@ -11,11 +11,19 @@ type PluginFetchFunction = (service: Service) => Promise<unknown>;
 // The values will be functions that return the module promise when called.
 const pluginApiModules = import.meta.glob('/src/lib/plugins/**/api.ts');
 
+// List known client-side plugins that don't have an api.ts
+const CLIENT_SIDE_PLUGINS = ['clock'];
+
 export const GET: RequestHandler = async ({ params, locals }) => {
 	const { plugin, service: serviceName } = params;
 
 	if (!plugin || !serviceName) {
 		throw error(400, 'Plugin and service parameters are required');
+	}
+
+	// If it's a known client-side plugin, return success immediately
+	if (CLIENT_SIDE_PLUGINS.includes(plugin)) {
+		return json({}); // Empty success response
 	}
 
 	try {

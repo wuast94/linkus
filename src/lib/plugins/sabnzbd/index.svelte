@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
 	import type { Service } from '$lib/types';
 
 	// Define types for the data structure
@@ -18,21 +17,16 @@
 		remaining: string; // Formatted remaining size (e.g., '10.5 GB')
 	}
 
-	let error = $state<string | null>(null);
-	let loading = $state(true);
-	let isInitialLoad = $state(true); // Flag for initial load
-	// Initialize with default structure
-	let data = $state<SabnzbdData>({ queue: [], speed: '0 KB/s', remaining: '0 GB' });
-
-	let {
-		service,
-		onClearErrorState = () => {},
-		onErrorState = (detail: { error: string | null }) => {}
-	} = $props<{
+	// Define the type for the props
+	interface Props {
 		service: Service;
-		onClearErrorState?: () => void;
-		onErrorState?: (detail: { error: string | null }) => void;
-	}>();
+		pluginData: SabnzbdData | null; // Expecting SabnzbdData structure or null
+		pluginStatus: 'unknown' | 'online' | 'warning' | 'error';
+		pluginError: string | null;
+	}
+
+	// Use $props() - Types are inferred from the Props interface with lang="ts"
+	let { service, pluginData, pluginStatus, pluginError } = $props();
 
 	function formatTime(timeStr: string) {
 		const parts = timeStr.split(':').slice(0, -1);
@@ -46,81 +40,26 @@
 		const remainingGB = parseFloat(remaining.replace(' GB', ''));
 		return (totalGB - remainingGB).toFixed(1) + ' GB';
 	}
-
-	async function fetchData() {
-		if (isInitialLoad) {
-			loading = true;
-		}
-		error = null; // Clear previous error
-		onClearErrorState();
-		try {
-			const response = await fetch(
-				`/api/plugins/${service.plugin}/${encodeURIComponent(service.name)}`
-			);
-
-			if (!response.ok) {
-				error = `HTTP ${response.status} ${response.statusText}`;
-				onErrorState({ error });
-				return;
-			}
-
-			const dataResponse = await response.json();
-
-			if (dataResponse.error) {
-				error = dataResponse.error;
-				onErrorState({ error });
-			} else {
-				data = {
-					queue: dataResponse.queue,
-					speed: dataResponse.speed,
-					remaining: dataResponse.remaining
-				};
-			}
-		} catch (err) {
-			if (err instanceof Error) {
-				error = err.message;
-			} else {
-				error = 'An unknown error occurred';
-			}
-			onErrorState({ error });
-		} finally {
-			if (isInitialLoad) {
-				loading = false;
-				isInitialLoad = false; // Set flag after first fetch completes
-			}
-		}
-	}
-
-	// Initial fetch
-	fetchData();
-
-	// Set up interval for fetching data
-	const updateIntervalMs = service.config?.update_interval ?? 60000; // Default to 60s
-	const interval = setInterval(fetchData, updateIntervalMs);
-
-	// Cleanup interval on component destroy
-	onDestroy(() => {
-		clearInterval(interval);
-	});
 </script>
 
 <div class="block border border-base-300 bg-base-200 shadow-md rounded p-4">
-	{#if error}
-		<p class="text-error">{service.plugin}: {error}</p>
-	{:else if loading && isInitialLoad}
-		<div class="flex justify-center items-center h-full">
-			<div class="flex items-center gap-2">
-				<span class="loading loading-spinner loading-sm"></span>
-				<p class="opacity-75">Loading {service.name}...</p>
+	{#if pluginStatus === 'error'}
+		<div class="alert alert-error shadow-sm">
+			<div>
+				<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+				<span>Error: {pluginError ?? 'Unknown Error'}</span>
 			</div>
 		</div>
-	{:else}
-		{#if data.queue.length === 0}
+	{:else if (pluginStatus === 'online' || pluginStatus === 'warning') && pluginData}
+		{#if pluginData.queue.length === 0}
 			<div class="text-sm opacity-75">No active downloads</div>
 		{:else}
 			{@const maxItemsToShow = typeof service.config?.max_items === 'number' && service.config.max_items > 0 ? service.config.max_items : 3}
-			<div class="flex flex-col gap-2">
-				{#each data.queue.slice(0, maxItemsToShow) as item}
+			<div class="flex flex-col gap-2 {pluginStatus === 'warning' ? 'opacity-75' : ''}">
+				{#if pluginStatus === 'warning'}
+					<div class="text-xs text-warning text-center opacity-100">Showing stale data...</div>
+				{/if}
+				{#each pluginData.queue.slice(0, maxItemsToShow) as item}
 					<div class="relative h-8 w-full overflow-hidden rounded bg-base-200">
 						<div
 							class="absolute left-0 top-0 h-full bg-primary"
@@ -141,15 +80,18 @@
 						</div>
 					</div>
 				{/each}
-				{#if data.queue.length > maxItemsToShow}
+				{#if pluginData.queue.length > maxItemsToShow}
 					<div class="text-xs opacity-75 mt-1">
-						+ {data.queue.length - maxItemsToShow} more items
+						+ {pluginData.queue.length - maxItemsToShow} more items
 					</div>
 				{/if}
 				<div class="text-sm opacity-75 mt-1">
-					Speed: {data.speed}
+					Speed: {pluginData.speed}
 				</div>
 			</div>
 		{/if}
+	{:else}
+		<!-- Should ideally not be reached if Plugin.svelte handles loading, but as a fallback -->
+		<div class="text-sm opacity-75">Loading data...</div>
 	{/if}
 </div>

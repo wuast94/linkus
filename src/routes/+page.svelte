@@ -14,20 +14,21 @@
 	const { services, categories, user } = data;
 
 	interface ServiceStatus {
-		status: 'unknown' | 'online' | 'offline';
+		status: 'unknown' | 'online' | 'offline' | 'warning';
 		responseTime: number | null;
 		error: string | null;
+		failureCount: number;
 	}
 
 	let serviceStatuses: { [key: string]: ServiceStatus } = {};
 
 	for (const service of services) {
 		if (service.type === 'http_check') {
-			serviceStatuses[service.name] = { status: 'unknown', responseTime: null, error: null };
+			serviceStatuses[service.name] = { status: 'unknown', responseTime: null, error: null, failureCount: 0 };
 		}
 	}
 
-	async function fetchServiceStatus(serviceUrl: string): Promise<Omit<ServiceStatus, 'status'> & { online: boolean, status?: number, statusText?: string }> {
+	async function fetchServiceStatus(serviceUrl: string): Promise<{ online: boolean; responseTime: number | null; error: string | null; status?: number; statusText?: string; }> {
 		try {
 			const response = await fetch(`/api/status?url=${encodeURIComponent(serviceUrl)}`);
 			const data = await response.json();
@@ -60,11 +61,23 @@
 			.filter(s => s.type === 'http_check' && s.url)
 			.map(async (service) => {
 				const result = await fetchServiceStatus(service.url!);
-				serviceStatuses[service.name] = {
-					status: result.online ? 'online' : 'offline',
-					responseTime: result.responseTime,
-					error: result.error
-				};
+				const currentStatus = serviceStatuses[service.name];
+				if (result.online) {
+					serviceStatuses[service.name] = {
+						status: 'online',
+						responseTime: result.responseTime,
+						error: null, // Clear error on success
+						failureCount: 0 // Reset failure count
+					};
+				} else {
+					const newFailureCount = (currentStatus?.failureCount || 0) + 1;
+					serviceStatuses[service.name] = {
+						status: newFailureCount >= 3 ? 'offline' : 'warning', // Set status based on count
+						responseTime: null,
+						error: newFailureCount >= 3 ? result.error : null, // Only show error after 3 failures
+						failureCount: newFailureCount
+					};
+				}
 			});
 
 		await Promise.allSettled(promises);
