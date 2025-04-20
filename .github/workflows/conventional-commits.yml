@@ -25,6 +25,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for accurate changelog generation
 
       - name: Conventional Changelog Action
         id: changelog
