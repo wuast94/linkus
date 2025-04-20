@@ -1,3 +1,17 @@
+## [0.6.0](https://github.com/wuast94/linkus/compare/v0.5.0...v0.6.0) (2025-04-20)
+
+
+### Features
+
+* **core:** at critical services at the top of the page ([eced68d](https://github.com/wuast94/linkus/commit/eced68d68ca384cea53a6b6d578e37e99df8d05f))
+
+
+### Bug Fixes
+
+* **calendar:** change how date is displayed ([c08a9ea](https://github.com/wuast94/linkus/commit/c08a9ea6f41337ad621170922f1db213d79b25c5))
+* **core:** Add warning system so the client is cleaner, now we go into a warning state first and only show errors after 3 errors in a row ([618e0db](https://github.com/wuast94/linkus/commit/618e0db04ea304c170ec6c00fe4f248f7bd33574))
+* **ui:** add icon ([3d8b4c3](https://github.com/wuast94/linkus/commit/3d8b4c3313e4104c19e979cfd8139dff6b53e5b9))
+
 ## [0.5.0](https://github.com/wuast94/linkus/compare/v0.4.0...v0.5.0) (2025-04-20)
 
 
