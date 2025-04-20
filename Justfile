@@ -9,7 +9,8 @@ lint:
     trunk check --all --fix -y
 
 docker-build:
-    docker build --no-cache -t linkus-app .
+    # Use buildx to build for multiple platforms and load the native one
+    docker buildx build --platform linux/amd64,linux/arm64 --no-cache -t linkus-app --load .
 
 docker-run:
     rm configtest/config.yaml || true
