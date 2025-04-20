@@ -32,9 +32,6 @@ COPY --from=builder /app/build build/
 
 RUN chown -R node:node /app
 
-# Inspect the final build output
-RUN echo "--- Listing build output --- >&2" && ls -R /app/build >&2 && echo "--- End build output --- >&2"
-
 USER node
 
 EXPOSE ${PORT}
