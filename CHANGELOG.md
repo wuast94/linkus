@@ -1,3 +1,10 @@
+## [0.6.3](https://github.com/wuast94/linkus/compare/v0.6.2...v0.6.3) (2025-04-20)
+
+
+### Bug Fixes
+
+* **core:** removed not needed logging ([fe73dd6](https://github.com/wuast94/linkus/commit/fe73dd69a56d6e5d12831ea66413f3b8715da38f))
+
 ## [0.6.2](https://github.com/wuast94/linkus/compare/v0.6.1...v0.6.2) (2025-04-20)
 
 
@@ -35,23 +42,4 @@
 ### Features
 
 * **core:** Add check_url field to separate health check URLs from user-facing URLs ([dd3a167](https://github.com/wuast94/linkus/commit/dd3a167c8da2f897e404ffce2eec5074e0b168bb))
-
-## [0.4.0](https://github.com/wuast94/linkus/compare/v0.3.0...v0.4.0) (2025-04-20)
-
-
-### Features
-
-* **clock:** add date and option to configure time format ([ebc5f3f](https://github.com/wuast94/linkus/commit/ebc5f3fd6817a979ee51123a7225162e09e4d479))
-* **core:** add option to set headers ([6a9cca1](https://github.com/wuast94/linkus/commit/6a9cca1450c123b7630aba183bb8dc82b6506191))
-* **rebuild:** rebuild ([309fd9f](https://github.com/wuast94/linkus/commit/309fd9f78fd10f542805f9c6ed6908afd7d141ec))
-* **ui:** add lucide icons ([02f30a9](https://github.com/wuast94/linkus/commit/02f30a9747d10e4d4fd86a5cf486a26ae7836613))
-
-
-### Bug Fixes
-
-* **core:** bump version for rebuild ([38c02be](https://github.com/wuast94/linkus/commit/38c02bec03ebad74892f80e2e35d7b328fbbabf9))
-* **core:** calculate ping times only server side ([aaccc0a](https://github.com/wuast94/linkus/commit/aaccc0aea7d49c4cb72f16a58ffd185e830a3193))
-* **core:** copy example config was broken ([b2b4495](https://github.com/wuast94/linkus/commit/b2b4495e47d5f880c63917f4136d520ee7368e4a))
-* **core:** some fixes ([4b9155c](https://github.com/wuast94/linkus/commit/4b9155c72de4b99d41b5a3e94c742762b83b7f01))
-* **lint:** fix ([e222f8f](https://github.com/wuast94/linkus/commit/e222f8f16a1780f3c5117a8480ce7da41be1662a))
 
