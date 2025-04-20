@@ -73,7 +73,7 @@
 		checkBackendStatus();
 
 		// Periodically check backend status (e.g., every 10 seconds)
-		const intervalMs = 10000;
+		const intervalMs = 1000;
 		checkInterval = window.setInterval(checkBackendStatus, intervalMs);
 	});
 
