@@ -10,6 +10,7 @@ export interface Service {
 	name: string;
 	icon?: string; // Optional icon
 	url?: string; // URL for the service (required for link/http_check, optional for plugin)
+	check_url?: string; // Optional: Separate URL specifically for health checks
 	type: 'http_check' | 'plugin' | 'link'; // Renamed 'ping' to 'http_check'
 	category?: string; // Optional category
 	description?: string; // Optional description

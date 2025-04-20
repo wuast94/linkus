@@ -75,7 +75,6 @@ services:
   #     - admin
   #   user:                 # Optional: Restrict visibility to specific usernames
   #     - myuser
-
   # Example: Media Calendar Plugin (Commented out by default)
   # - name: Media Calendar
   #   type: plugin
@@ -99,6 +98,16 @@ services:
   #     - admin
   #   user:                 # Optional: Restrict visibility to specific usernames
   #     - myuser
+  - name: Router
+    type: http_check
+    icon: server
+    url: https://router.local # URL to link to when clicked (user-facing)
+    # Optional: Use a different URL for the health check (e.g., internal address)
+    # If omitted, the main 'url' will be used for the health check.
+    check_url: https://192.168.178.1
+    category: network
+    description: Network Gateway
+    # Optional HTTP headers for the status check request
 
 # Category definitions
 # Define the categories used to group services in the UI.
@@ -118,6 +127,9 @@ categories:
   - id: tools
     name: Tools & Utilities
     icon: tool
+  - id: network
+    name: Network
+    icon: server
 # Forward Authentication Simulation (Optional, for Development/Testing)
 # If you run Linkus behind a forward authentication proxy (like Authelia, Authentik),
 # Linkus reads headers like 'Remote-User', 'Remote-Groups' to determine the user.

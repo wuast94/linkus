@@ -42,8 +42,12 @@ export const load: PageServerLoad = ({ locals }) => {
 		return false;
 	});
 
+	// Sanitize services: Remove sensitive fields like check_url before sending to client
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Destructuring to omit check_url intentionally
+	const sanitizedServices = services.map(({ check_url, ...rest }) => rest);
+
 	return {
-		services, // Use services variable
+		services: sanitizedServices, // Send the sanitized list to the client
 		categories: config.categories,
 		user
 	};
