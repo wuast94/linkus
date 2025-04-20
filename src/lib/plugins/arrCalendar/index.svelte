@@ -13,10 +13,9 @@
 	let { service, pluginData, pluginStatus, pluginError } = $props();
 
 	function formatDate(dateString: string): string {
-		// Format date as DD/MM
-		return new Date(dateString).toLocaleDateString('en-GB', { // Use en-GB locale for DD/MM
-			day: '2-digit',
-			month: '2-digit'
+		return new Date(dateString).toLocaleDateString('en-US', { // Use en-US for standard Month Day format
+			day: 'numeric',
+			month: 'long'
 		});
 	}
 </script>
@@ -77,12 +76,12 @@
 									<span class="badge badge-sm badge-outline ml-2 flex-shrink-0">{formatDate(item.start || item.airDateUtc)}</span> <!-- Use item.start if available -->
 								</div>
 								{#if props.seasonNumber != null && props.episodeNumber != null}
-									<span class="text-xs opacity-70 block">
+									<span class="text-sm opacity-70 block">
 										S{String(props.seasonNumber).padStart(2, '0')}E{String(props.episodeNumber).padStart(2, '0')}
 										{#if props.subtitle} - {props.subtitle}{/if}
 									</span>
 								{:else if props.subtitle}
-									<span class="text-xs opacity-70 block">{props.subtitle}</span>
+									<span class="text-sm opacity-70 block">{props.subtitle}</span>
 								{/if}
 							</div>
 						</div>
