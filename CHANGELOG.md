@@ -1,3 +1,13 @@
+## [0.6.2](https://github.com/wuast94/linkus/compare/v0.6.1...v0.6.2) (2025-04-20)
+
+
+### Bug Fixes
+
+* **docker:** fix arm build … try ([f4fd83d](https://github.com/wuast94/linkus/commit/f4fd83d615a40be4bebe2f26162385b5455efe95))
+* **docker:** fix arm build … try yeah ([a80ba95](https://github.com/wuast94/linkus/commit/a80ba953eec306edefcdf0c7ddbf807ad366984f))
+* **docker:** fix arm build seccond try and add local multi plattform build for testing locally first ([904591a](https://github.com/wuast94/linkus/commit/904591ac9e78d1a95f46db413526b5e1a3a3cce6))
+* **docker:** fix arm build third try ([ce5b451](https://github.com/wuast94/linkus/commit/ce5b451da283c831db9419ef9a201eb15196af21))
+
 ## [0.6.1](https://github.com/wuast94/linkus/compare/v0.6.0...v0.6.1) (2025-04-20)
 
 
@@ -44,19 +54,4 @@
 * **core:** copy example config was broken ([b2b4495](https://github.com/wuast94/linkus/commit/b2b4495e47d5f880c63917f4136d520ee7368e4a))
 * **core:** some fixes ([4b9155c](https://github.com/wuast94/linkus/commit/4b9155c72de4b99d41b5a3e94c742762b83b7f01))
 * **lint:** fix ([e222f8f](https://github.com/wuast94/linkus/commit/e222f8f16a1780f3c5117a8480ce7da41be1662a))
-
-## [0.3.0](https://github.com/wuast94/linkus/compare/v0.2.0...v0.3.0) (2025-04-16)
-
-
-### Features
-
-* **core:** Add Server check and reload after reconnect ([9e7a8a0](https://github.com/wuast94/linkus/commit/9e7a8a0bb5978ad5267a674d678bc26c93410268))
-* **docker:** test scout ([1d7a8d0](https://github.com/wuast94/linkus/commit/1d7a8d0ca15e090f385c62d2e8db86f963717817))
-* **ui:** add all category ([9bc9c86](https://github.com/wuast94/linkus/commit/9bc9c86736ab7223e3f484fc766b72c60398c610))
-* **ui:** cache modules when changing categorys ([3aaa822](https://github.com/wuast94/linkus/commit/3aaa822d7187b14d51b290f39e69e951ca2ba6ad))
-
-
-### Bug Fixes
-
-* **docker:** Update healthcheck endpoint from / to /api/health in Dockerfile ([e9e2df6](https://github.com/wuast94/linkus/commit/e9e2df6e58dff40c20996dbf428d6ae51e7dc12c))
 
