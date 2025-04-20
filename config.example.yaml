@@ -19,7 +19,10 @@ services:
   - name: DuckDuckGo
     type: http_check # Type identifier for HTTP status checks
     icon: search # Icon name (Lucide name like 'search', or custom file like 'my-icon.svg')
-    url: https://duckduckgo.com # The URL to ping for status
+    url: https://duckduckgo.com # User-facing URL to link to when clicked
+    # Optional: Use a different URL for the health check (e.g., a specific status endpoint)
+    # If omitted, the main 'url' will be used for the health check.
+    # check_url: https://duckduckgo.com/status # Hypothetical example
     category: internet # Assigns the service to the 'internet' category
     description: Privacy-focused Search # Optional description shown on hover/details
     ping_interval: 60 # How often to check the status (in seconds). Default: 30
