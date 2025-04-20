@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import nodeFetch from 'node-fetch';
+import nodeFetch, { Headers } from 'node-fetch';
 import https from 'https';
 import http from 'http';
 import process from 'process'; // Import process for NODE_ENV
@@ -12,14 +12,21 @@ export const GET: RequestHandler = async ({ url }) => {
 		return json({ online: false, error: 'No URL provided' }, { status: 400 });
 	}
 
-	// --- Server-Side Validation ---
+	// --- Server-Side Validation & Header Retrieval ---
+	let serviceHeaders: Record<string, string> | undefined;
 	try {
 		const config = getConfig();
-		const allowedUrls = config.services.map((service) => service.url);
+		// Find the specific service config matching the URL
+		const service = config.services.find((s) => s.url === targetUrl);
 
-		if (!allowedUrls.includes(targetUrl)) {
+		if (!service) {
 			console.warn(`🚨 Blocked attempt to check unauthorized URL: ${targetUrl}`);
 			return json({ online: false, error: 'Unauthorized URL' }, { status: 403 }); // Forbidden
+		}
+
+		// Get headers from the specific service config if type is http_check and headers exist
+		if (service.type === 'http_check' && service.headers) {
+			serviceHeaders = service.headers;
 		}
 	} catch (configError) {
 		console.error('🚨 Failed to load configuration for URL validation:', configError);
@@ -38,7 +45,8 @@ export const GET: RequestHandler = async ({ url }) => {
 		const response = await nodeFetch(targetUrl, {
 			method: 'GET',
 			signal: controller.signal,
-			agent
+			agent,
+			headers: serviceHeaders ? new Headers(serviceHeaders) : undefined // Pass headers if defined
 		});
 		const endTime = performance.now(); // End timing
 
