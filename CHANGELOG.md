@@ -1,3 +1,10 @@
+## [0.5.0](https://github.com/wuast94/linkus/compare/v0.4.0...v0.5.0) (2025-04-20)
+
+
+### Features
+
+* **core:** Add check_url field to separate health check URLs from user-facing URLs ([dd3a167](https://github.com/wuast94/linkus/commit/dd3a167c8da2f897e404ffce2eec5074e0b168bb))
+
 ## [0.4.0](https://github.com/wuast94/linkus/compare/v0.3.0...v0.4.0) (2025-04-20)
 
 
