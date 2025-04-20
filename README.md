@@ -12,6 +12,7 @@ Built with SvelteKit. Linkus is modular, themeable, and extensible.
 
 - **Dynamic Visibility:** Automatically shows/hides services and plugins based on user group memberships obtained from authentication proxy headers.
 - **Service Modules:** Displays configured services with status checks and direct links.
+  - Supports icons via direct URL or by using [Lucide icon](https://lucide.dev/) names in the `icon` field.
 - **Plugin System:** Allows adding custom components (e.g., calendar, download queue) linked to services, also respecting group permissions. Current plugins include `arrCalendar`, `sabnzbd`, `clock`.
 - **Configurable:** All services, categories, and user access mappings are managed via `config/config.yaml`.
 - **Theming:** Uses Tailwind CSS with [DaisyUI](https://daisyui.com/) components and its themes.

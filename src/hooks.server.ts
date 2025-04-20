@@ -1,6 +1,16 @@
 // See https://kit.svelte.dev/docs/types#app
 import type { Handle, HandleServerError } from '@sveltejs/kit';
-import { getConfig } from '$lib/utils/config';
+import { getConfig, initializeConfiguration } from '$lib/utils/config';
+
+// --- Initialize Configuration --- START
+try {
+	initializeConfiguration();
+} catch (err) {
+	console.error('Failed to initialize application on server startup:', err);
+	// Decide if the application should exit or handle the error gracefully
+	// process.exit(1); // Example: Exit if config is critical
+}
+// --- Initialize Configuration --- END
 
 // Extend the Locals interface (Standard SvelteKit practice)
 

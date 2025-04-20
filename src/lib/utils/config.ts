@@ -62,7 +62,7 @@ function ensureConfigExists() {
 			}
 		}
 	} catch (error) {
-		console.error('Error during config file check/copy:', error);
+		console.error('Error during config file/directory check/creation:', error);
 		throw error; // Re-throw error to prevent application start with invalid config state
 	}
 }
@@ -95,23 +95,32 @@ function loadConfig(): Config {
 	return config;
 }
 
-// Load the config immediately when this module is imported
-try {
-	loadConfig();
-} catch (error) {
-	console.error('Critical error during initial configuration load:', error);
-	// Depending on the environment, you might want to exit the process
-	// process.exit(1);
+// --- Initialization Function (Sync) --- START
+let isInitialized = false; // Still useful to prevent accidental re-initialization
+
+export function initializeConfiguration(): void {
+	if (isInitialized) {
+		// console.warn('Configuration already initialized.'); // Optional: reduce noise
+		return;
+	}
+	try {
+		loadConfig(); // This performs the main loading logic synchronously
+		isInitialized = true;
+		console.log('Configuration initialized successfully.');
+	} catch (error) {
+		console.error('Critical error during configuration initialization:', error);
+		// Prevent application from potentially running in a bad state
+		throw new Error('Failed to initialize application configuration.');
+	}
 }
+// --- Initialization Function (Sync) --- END
 
 // Export a function to get the loaded config
 export function getConfig(): Config {
 	if (config === null) {
-		// This path indicates a failure during the initial load.
-		console.error('Attempting to get config, but initial load failed or config is null.');
-		// Optionally attempt a reload, but it likely failed for a persistent reason.
-		// loadConfig(); // Be cautious about retrying automatically.
-		throw new Error('Configuration is not available due to load failure.');
+		throw new Error(
+			'Configuration has not been initialized. Call initializeConfiguration() first.'
+		);
 	}
 	return config;
 }
