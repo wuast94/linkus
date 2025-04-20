@@ -133,6 +133,34 @@ categories:
   - id: network
     name: Network
     icon: server
+
+# Optional: Critical system alerts displayed prominently at the top.
+# These are checked independently from regular services.
+critical_alerts:
+  - name: Router Ping
+    type: ping
+    target: 192.168.178.1 # Hostname or IP address
+    interval: 60 # Check every 60 seconds (optional, defaults might apply)
+    allowed_groups: [admin] # Optional access control
+
+  - name: API Health Check
+    type: web_json
+    target: https://aisenseapi.com/services/v1/health
+    interval: 120
+    json_path: $.status # Check the 'status' field in the root JSON object
+    expected_value: ok # Expected value for the check to pass
+
+  - name: Website Content Check
+    type: web_text
+    target: https://awesome-selfhosted.net/index.html
+    interval: 300
+    text_present: Awesome-Selfhosted
+    # text_absent: "Maintenance Mode" # Optionally, check if this text *doesn't* exist
+
+# Optional: Plugins enhance the dashboard with dynamic content.
+plugins:
+  - name: clock
+    # ... (rest of the plugins configuration remains the same)
 # Forward Authentication Simulation (Optional, for Development/Testing)
 # If you run Linkus behind a forward authentication proxy (like Authelia, Authentik),
 # Linkus reads headers like 'Remote-User', 'Remote-Groups' to determine the user.

@@ -201,10 +201,10 @@
 
 </script>
 
-<div class="p-4 min-h-screen">
+<div class="min-h-screen">
 	<div class="flex flex-col gap-4">
 		<!-- Header with Welcome and Search -->
-		<div class="flex items-center gap-8 mt-4">
+		<div class="flex items-center gap-8">
 			<div class="flex-1">
 				<SearchBar />
 			</div>

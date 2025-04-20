@@ -3,6 +3,7 @@
 	import type { PageData } from './$types';
 	import '../app.css';
 	import 'overlayscrollbars/overlayscrollbars.css';
+	import CriticalAlerts from '$lib/components/CriticalAlerts.svelte'; // Import the new component
 
 	export let data: PageData;
 
@@ -94,7 +95,8 @@
 <div class="app-container">
 	<!-- Header placeholder (optional) -->
 	<!-- <header><h1></h1></header> -->
-	<main>
+	<main class="p-2">
+		<CriticalAlerts criticalAlerts={data.criticalAlerts} />
 		<slot />
 	</main>
 	<!-- Footer placeholder (optional) -->
