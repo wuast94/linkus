@@ -82,7 +82,6 @@
 
 		await Promise.allSettled(promises);
 		serviceStatuses = { ...serviceStatuses };
-		console.log("Status fetch complete:", serviceStatuses);
 	}
 
 	let statusInterval: number | null = null;
