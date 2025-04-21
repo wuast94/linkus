@@ -86,54 +86,24 @@
 
 	let statusInterval: number | null = null;
 
-	interface CategoryGroup {
-		name: string;
-		icon: string;
-		services: ServiceType[];
-	}
-
-	type ServicesByCategory = {
-		[key: string]: CategoryGroup;
-	}
-
 	let selectedCategory: string | null = 'all';
-
-	const servicesByCategory: ServicesByCategory = {};
-
-	for (const category of categories) {
-		servicesByCategory[category.id] = {
-			name: category.name,
-			icon: category.icon,
-			services: []
-		};
-	}
-
-	for (const service of services) {
-		const categoryId = service.category;
-
-		if (categoryId && servicesByCategory[categoryId]) {
-			servicesByCategory[categoryId].services.push(service);
-		} else {
-			if (!servicesByCategory['uncategorized']) {
-				servicesByCategory['uncategorized'] = {
-					name: 'Uncategorized',
-					icon: 'question',
-					services: []
-				};
-			}
-			servicesByCategory['uncategorized'].services.push(service);
-		}
-	}
 
 	function selectCategory(categoryId: string | null) {
 		selectedCategory = categoryId;
 	}
 
-	$: filteredCategories = selectedCategory === 'all'
-		? Object.values(servicesByCategory)
-		: selectedCategory
-			? [servicesByCategory[selectedCategory]]
-			: [];
+	onMount(() => {
+		fetchAllStatuses();
+
+		const updateInterval = 30000;
+		statusInterval = window.setInterval(fetchAllStatuses, updateInterval);
+	});
+
+	onDestroy(() => {
+		if (statusInterval !== null) {
+			clearInterval(statusInterval);
+		}
+	});
 
 	let mainContentElement: HTMLElement;
 	let pluginWidth = 500;
@@ -169,11 +139,6 @@
 	}
 
 	onMount(() => {
-		fetchAllStatuses();
-
-		const updateInterval = 30000;
-		statusInterval = window.setInterval(fetchAllStatuses, updateInterval);
-
 		if (mainContentElement) {
 			resizeObserver = new ResizeObserver(entries => {
 				for (let entry of entries) {
@@ -189,15 +154,10 @@
 	});
 
 	onDestroy(() => {
-		if (statusInterval !== null) {
-			clearInterval(statusInterval);
-		}
-
 		if (resizeObserver && mainContentElement) {
 			resizeObserver.unobserve(mainContentElement);
 		}
 	});
-
 </script>
 
 <div class="min-h-screen">
@@ -218,7 +178,7 @@
 			>
 				All
 			</button>
-			{#each categories as category}
+			{#each categories as category (category.id)}
 				<button
 					class="btn btn-sm {selectedCategory === category.id ? 'btn-primary' : 'btn-ghost'}"
 					on:click={() => selectCategory(category.id)}
@@ -233,15 +193,13 @@
 			<!-- Modules section (grows, contains auto-fit grid) -->
 			<div class="min-w-0 flex-1">
 				<div class="grid gap-2" style="grid-template-columns: repeat(auto-fit, 250px); justify-content: start;">
-					{#each filteredCategories as category}
-						{#each category.services as service}
+					{#each services as service (service.name)}
+						{#if selectedCategory === 'all' || service.category === selectedCategory}
 							{#if service.type === 'http_check'}
 								{@const statusData = serviceStatuses[service.name] || { status: 'unknown', responseTime: null, error: 'Loading...' }}
-								{#key service.name}
-									<Module {service} status={statusData.status} responseTime={statusData.responseTime} error={statusData.error} />
-								{/key}
+								<Module {service} status={statusData.status} responseTime={statusData.responseTime} error={statusData.error} />
 							{/if}
-						{/each}
+						{/if}
 					{/each}
 				</div>
 			</div>
@@ -249,14 +207,12 @@
 			<!-- Plugins section (doesn't shrink, width is reactive) -->
 			<div class="flex-shrink-0" style="width: {pluginWidth}px;">
 				<div class="grid gap-2">
-					{#each filteredCategories as category}
-						{#each category.services as service}
+					{#each services as service (service.name)}
+						{#if selectedCategory === 'all' || service.category === selectedCategory}
 							{#if service.type !== 'http_check'}
-								{#key service.name}
-									<DynamicPlugin {service} />
-								{/key}
+								<DynamicPlugin {service} />
 							{/if}
-						{/each}
+						{/if}
 					{/each}
 				</div>
 			</div>
