@@ -143,7 +143,7 @@
 		const moduleItemWidth = 250;
 		const moduleGap = 8;
 		const mainGap = 16;
-		const minPluginWidth = 350;
+		const minPluginWidth = 458;
 		const maxPluginWidth = 650;
 
 		const maxModuleAreaWidth = currentContainerWidth - minPluginWidth - mainGap;

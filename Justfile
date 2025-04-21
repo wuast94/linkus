@@ -10,7 +10,7 @@ lint:
 
 docker-build:
     # Use buildx to build for multiple platforms and load the native one
-    docker buildx build --platform linux/amd64,linux/arm64 --no-cache -t linkus-app --load .
+    docker buildx build --platform linux/amd64,linux/arm64 -t linkus-app --load .
 
 docker-run:
     rm configtest/config.yaml || true
