@@ -44,31 +44,13 @@
 	}
 
 	onMount(() => {
-		const appConfig = data.appConfig;
-		const pageTitle = appConfig?.title ?? 'Linkus';
-		const configTheme = appConfig?.theme ?? 'system'; // Renamed for clarity
+		// Use the title directly from the data passed by layout.server.ts
+		const pageTitle = data.configTitle ?? 'Linkus';
 		document.title = pageTitle; // Set title dynamically
 
-		let actualTheme = configTheme; // Determine the theme to apply
-
-		// Resolve 'system' theme immediately
-		if (configTheme === 'system') {
-			actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-		}
-
-		// Set the initial theme
-		document.documentElement.setAttribute('data-theme', actualTheme);
-
-		// Add listener ONLY if the config is set to 'system'
-		if (configTheme === 'system') {
-			const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-			const handleChange = () => {
-				// Update based on OS preference change
-				const newSystemTheme = mediaQuery.matches ? 'dark' : 'light';
-				document.documentElement.setAttribute('data-theme', newSystemTheme);
-			};
-			mediaQuery.addEventListener('change', handleChange);
-		}
+		// TODO: Revisit theme setting logic if needed.
+		// The theme from config is not directly passed in layout data currently.
+		// It might be handled via CSS variables set elsewhere or client-side config reading.
 
 		// Initial backend check
 		checkBackendStatus();

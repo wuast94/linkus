@@ -25,6 +25,7 @@
 
 	let sortedAlerts: ClientSafeCriticalAlert[] = [];
 	$: sortedAlerts = [...criticalAlerts].sort((a, b) => {
+		// Default to 'checking' for sorting if not yet in map
 		const statusA = alertStatuses.get(a.name)?.status || 'checking';
 		const statusB = alertStatuses.get(b.name)?.status || 'checking';
 		const orderA = statusOrder[statusA];
@@ -38,7 +39,8 @@
 
 	async function fetchAlertStatus(alert: ClientSafeCriticalAlert) {
 		const alertName = alert.name;
-		alertStatuses.set(alertName, { status: 'checking' });
+		// Do NOT set to 'checking' here - this prevents the flicker
+		// alertStatuses.set(alertName, { status: 'checking' });
 
 		try {
 			const response = await fetch(`/api/alerts/status?name=${encodeURIComponent(alertName)}`);
@@ -60,6 +62,15 @@
 	}
 
 	onMount(() => {
+		// Initialize all alert statuses to 'checking'
+		criticalAlerts.forEach(alert => {
+			if (!alertStatuses.has(alert.name)) {
+				alertStatuses.set(alert.name, { status: 'checking' });
+			}
+		});
+		// Trigger initial reactivity for the map
+		alertStatuses = alertStatuses;
+
 		criticalAlerts.forEach((alert) => {
 			// Initial fetch
 			fetchAlertStatus(alert);
