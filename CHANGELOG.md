@@ -1,3 +1,10 @@
+## [0.6.4](https://github.com/wuast94/linkus/compare/v0.6.3...v0.6.4) (2025-04-21)
+
+
+### Bug Fixes
+
+* **ui:** Fix min witdh of plugin section ([254f2dc](https://github.com/wuast94/linkus/commit/254f2dcbcfc28bf8f1ce9aa31eb88110683aa242))
+
 ## [0.6.3](https://github.com/wuast94/linkus/compare/v0.6.2...v0.6.3) (2025-04-20)
 
 
@@ -35,11 +42,4 @@
 * **calendar:** change how date is displayed ([c08a9ea](https://github.com/wuast94/linkus/commit/c08a9ea6f41337ad621170922f1db213d79b25c5))
 * **core:** Add warning system so the client is cleaner, now we go into a warning state first and only show errors after 3 errors in a row ([618e0db](https://github.com/wuast94/linkus/commit/618e0db04ea304c170ec6c00fe4f248f7bd33574))
 * **ui:** add icon ([3d8b4c3](https://github.com/wuast94/linkus/commit/3d8b4c3313e4104c19e979cfd8139dff6b53e5b9))
-
-## [0.5.0](https://github.com/wuast94/linkus/compare/v0.4.0...v0.5.0) (2025-04-20)
-
-
-### Features
-
-* **core:** Add check_url field to separate health check URLs from user-facing URLs ([dd3a167](https://github.com/wuast94/linkus/commit/dd3a167c8da2f897e404ffce2eec5074e0b168bb))
 
