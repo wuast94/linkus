@@ -1,3 +1,10 @@
+## [0.7.1](https://github.com/wuast94/linkus/compare/v0.7.0...v0.7.1) (2025-05-06)
+
+
+### Bug Fixes
+
+* **core:** optimize site ([19ab0c5](https://github.com/wuast94/linkus/commit/19ab0c549345600a039fcf223b4ce3fe4af58d7e))
+
 ## [0.7.0](https://github.com/wuast94/linkus/compare/v0.6.4...v0.7.0) (2025-04-21)
 
 
@@ -33,11 +40,4 @@
 * **docker:** fix arm build … try yeah ([a80ba95](https://github.com/wuast94/linkus/commit/a80ba953eec306edefcdf0c7ddbf807ad366984f))
 * **docker:** fix arm build seccond try and add local multi plattform build for testing locally first ([904591a](https://github.com/wuast94/linkus/commit/904591ac9e78d1a95f46db413526b5e1a3a3cce6))
 * **docker:** fix arm build third try ([ce5b451](https://github.com/wuast94/linkus/commit/ce5b451da283c831db9419ef9a201eb15196af21))
-
-## [0.6.1](https://github.com/wuast94/linkus/compare/v0.6.0...v0.6.1) (2025-04-20)
-
-
-### Bug Fixes
-
-* **docker:** fix arm build ([0099018](https://github.com/wuast94/linkus/commit/009901823ce53da0f16ba2becba7e44b2f77c336))
 
