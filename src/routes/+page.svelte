@@ -56,7 +56,7 @@
 	}
 
 	async function fetchAllStatuses() {
-		console.log("Fetching all statuses...");
+		// console.log("Fetching all statuses...");
 		const promises = services
 			.filter(s => s.type === 'http_check' && s.url)
 			.map(async (service) => {
@@ -81,7 +81,7 @@
 			});
 
 		await Promise.allSettled(promises);
-		serviceStatuses = { ...serviceStatuses };
+		// serviceStatuses = { ...serviceStatuses };
 	}
 
 	let statusInterval: number | null = null;
