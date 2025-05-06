@@ -34,3 +34,5 @@ next.config.ts.timestamp-*
 # Configs
 config
 /config.yaml # Ignore root config file potentially used for local dev
+
+/.vscode
